@@ -1,0 +1,60 @@
+.record-empty {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.record-group {
+  margin-top: 22px;
+}
+
+.record-date {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.record-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.record-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  min-height: 56px;
+  padding: 10px 14px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.record-row:active {
+  background: var(--surface-2);
+}
+
+.record-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+}
+
+.record-kind {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.record-range {
+  font-variant-numeric: tabular-nums;
+}
+
+.record-sub {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}

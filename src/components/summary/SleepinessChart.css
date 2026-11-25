@@ -1,0 +1,81 @@
+.sleepiness-chart svg {
+  display: block;
+  max-width: 100%;
+}
+
+.sleepiness-grid {
+  stroke: var(--chart-grid);
+  stroke-width: 1;
+}
+.sleepiness-axis,
+.sleepiness-tick {
+  stroke: var(--chart-axis-text);
+  stroke-width: 1;
+}
+.sleepiness-axis-text {
+  fill: var(--chart-axis-text);
+  font-size: 9px;
+}
+.sleepiness-axis-title {
+  fill: var(--chart-axis-text);
+  font-size: 10px;
+}
+.sleepiness-line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.sleepiness-series--workday .sleepiness-line,
+.sleepiness-legend-workday.sleepiness-line {
+  stroke: var(--chart-workday);
+}
+.sleepiness-series--free .sleepiness-line,
+.sleepiness-legend-free.sleepiness-line {
+  stroke: var(--chart-free);
+  stroke-dasharray: 5 3;
+}
+.sleepiness-series--workday .sleepiness-marker,
+.sleepiness-legend-workday.sleepiness-marker {
+  fill: var(--chart-workday);
+  stroke: none;
+}
+.sleepiness-series--free .sleepiness-marker,
+.sleepiness-legend-free.sleepiness-marker {
+  fill: var(--chart-free);
+  stroke: none;
+}
+.sleepiness-series--workday .sleepiness-count {
+  fill: var(--chart-workday);
+}
+.sleepiness-series--free .sleepiness-count {
+  fill: var(--chart-free);
+}
+.sleepiness-count {
+  font-size: 8.5px;
+  /* 線や点と重なっても読めるよう、背景色で縁取りする */
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.sleepiness-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+}
+.sleepiness-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sleepiness-note {
+  margin: 4px 0 0;
+  font-size: 0.75rem;
+  color: var(--chart-axis-text);
+}

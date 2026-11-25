@@ -1,0 +1,64 @@
+.home-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.home-big {
+  width: 100%;
+  height: 20vh;
+  min-height: 110px;
+  border-radius: 22px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 2rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.home-big:active {
+  filter: brightness(0.85);
+}
+
+.home-wake {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.home-pending {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.home-cancel {
+  min-height: 40px;
+  padding: 6px 14px;
+  font-size: 0.9rem;
+}
+
+.home-drowsy-time {
+  margin: 0 0 12px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.home-levels {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.home-level {
+  flex: none;
+  min-height: 72px;
+  font-size: 1.6rem;
+}
+
+.home-level small {
+  font-size: 0.85rem;
+}

@@ -1,0 +1,17 @@
+.band-chart svg { display: block; }
+.band-axis-text { fill: var(--chart-axis-text); font-size: 9px; }
+.band-date { font-size: 9px; }
+.band-grid { stroke: var(--chart-grid); stroke-width: 0.5; }
+.band-sep { stroke-width: 0.3; }
+.band-free-row { fill: var(--chart-free-row); }
+.band-sleep { fill: var(--chart-sleep); }
+.band-sleepy { fill: var(--chart-sleepy); stroke: var(--chart-axis-text); stroke-width: 0.4; }
+.band-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 0.8rem; }
+.band-legend-item { display: inline-flex; align-items: center; gap: 5px; }
+.band-swatch { display: inline-block; width: 12px; height: 10px; }
+.band-swatch-sleep { background: var(--chart-sleep); }
+.band-swatch-free { background: var(--chart-free-row); border: 1px solid var(--chart-grid); }
+.band-swatch-sleepy {
+  background: var(--chart-sleepy);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
