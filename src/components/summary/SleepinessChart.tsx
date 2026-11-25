@@ -164,7 +164,7 @@ export function SleepinessChart(props: { sleeps: SleepRecord[]; sleepiness: Slee
           自由な日(目覚ましなし)
         </li>
       </ul>
-      <p className="sleepiness-note">眠気 1=はっきり、5=起きていられない。点の横の数字は記録件数</p>
+      <p className="sleepiness-note">眠気 1=少し眠い、5=起きていられない。点の横の数字は記録件数</p>
     </div>
   );
 }

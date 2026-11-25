@@ -22,8 +22,9 @@ describe('覚めてきたボタンの対象', () => {
     expect(sleepinessAwaitingEase({ ...rec, easedAt: jst('2026-11-20T15:00') }, null, null)).toBeNull();
   });
 
-  it('眠気1(はっきり)なら null', () => {
-    expect(sleepinessAwaitingEase({ ...rec, level: 1 }, null, null)).toBeNull();
+  it('眠気1(少し眠い)でも対象', () => {
+    const mild: SleepinessRecord = { ...rec, level: 1 };
+    expect(sleepinessAwaitingEase(mild, null, null)).toBe(mild);
   });
 
   it('その後に睡眠を記録していれば null', () => {

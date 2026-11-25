@@ -34,17 +34,17 @@ export interface SleepinessRecord {
   id?: number;
   /** 記録した時刻 */
   time: number;
-  /** 眠気の強さ 1〜5(1=はっきり、5=起きていられない) */
+  /** 眠気の強さ 1〜5(眠いときだけ記録する。1=少し眠い、5=起きていられない) */
   level: Rating;
   /** その眠気が覚めてきた時刻(未記録なら無し)。time 以降 */
   easedAt?: number;
 }
 
 export const SLEEPINESS_LABEL: Record<Rating, string> = {
-  1: 'はっきり',
-  2: 'ややはっきり',
-  3: 'ふつう',
-  4: '眠い',
+  1: '少し眠い',
+  2: '眠い',
+  3: 'かなり眠い',
+  4: '気を抜くと寝そう',
   5: '起きていられない',
 };
 
