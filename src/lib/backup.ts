@@ -25,7 +25,9 @@ export async function createBackup(): Promise<BackupFile> {
       alarm: s.alarm,
       refreshed: s.refreshed,
     })),
-    sleepiness: sleepiness.map((s) => ({ time: s.time, level: s.level })),
+    sleepiness: sleepiness.map((s) =>
+      s.easedAt != null ? { time: s.time, level: s.level, easedAt: s.easedAt } : { time: s.time, level: s.level },
+    ),
   };
 }
 
@@ -72,10 +74,13 @@ export function parseBackup(text: string): BackupFile {
 
   const sleepiness: BackupFile['sleepiness'] = raw.sleepiness.map((item: unknown, i: number) => {
     if (!isObj(item)) fail(`眠気 ${i + 1}件目が不正です`);
-    const { time, level } = item;
+    const { time, level, easedAt } = item;
     if (!isFiniteNum(time)) fail(`眠気 ${i + 1}件目の時刻が不正です`);
     if (!isRating(level)) fail(`眠気 ${i + 1}件目の強さが不正です`);
-    return { time, level };
+    // 覚めてきた時刻は後から追加した項目なので、無くてもよい
+    if (easedAt === undefined || easedAt === null) return { time, level };
+    if (!isFiniteNum(easedAt) || easedAt < time) fail(`眠気 ${i + 1}件目の覚めてきた時刻が不正です`);
+    return { time, level, easedAt };
   });
 
   return {

@@ -5,7 +5,8 @@ import {
   db,
   setPendingSleepStart,
 } from '../db';
-import { formatDateTime, formatTime, nowMinute } from '../lib/time';
+import { dateKey, formatDateTime, formatTime, nowMinute } from '../lib/time';
+import { sleepinessAwaitingEase } from '../lib/sleepiness';
 import { RATINGS, SLEEPINESS_LABEL, type Rating, type SleepRecord } from '../types';
 import { Sheet } from '../components/Sheet';
 import { SleepForm } from '../components/SleepForm';
@@ -15,6 +16,14 @@ import './Home.css';
 export function Home() {
   const toast = useToast();
   const pending = useLiveQuery(() => db.pending.get('sleepStart'));
+  const latestDrowsy = useLiveQuery(() => db.sleepiness.orderBy('time').last());
+  const latestSleep = useLiveQuery(() => db.sleeps.orderBy('end').last());
+  // 「覚めてきた」を押せる眠気の記録(最新1件)
+  const easing = sleepinessAwaitingEase(
+    latestDrowsy,
+    latestSleep ? latestSleep.end : null,
+    pending ? pending.time : null,
+  );
 
   // 起きた: タップ時点の end と start を保持
   const [wake, setWake] = useState<{ start: number | null; end: number } | null>(null);
@@ -58,6 +67,18 @@ export function Home() {
     }
   };
 
+  const onEased = async () => {
+    if (!easing || savingRef.current) return;
+    savingRef.current = true;
+    try {
+      const t = Math.max(nowMinute(), easing.time);
+      await db.sleepiness.update(easing.id!, { easedAt: t });
+      toast(`眠気が覚めてきた時刻を記録しました(${formatTime(t)})`);
+    } finally {
+      savingRef.current = false;
+    }
+  };
+
   const cancelPending = async () => {
     if (window.confirm('寝た時刻(仮)を取り消しますか?')) {
       await clearPendingSleepStart();
@@ -85,6 +106,21 @@ export function Home() {
           <span>寝た時刻(仮) {formatDateTime(pending.time)}</span>
           <button type="button" className="btn home-cancel" onClick={cancelPending}>
             取り消し
+          </button>
+        </div>
+      )}
+
+      {easing && (
+        <div className="card home-easing">
+          <span>
+            眠気 {easing.level}(
+            {dateKey(easing.time) === dateKey(Date.now())
+              ? formatTime(easing.time)
+              : formatDateTime(easing.time)}
+            〜)
+          </span>
+          <button type="button" className="btn" onClick={onEased}>
+            覚めてきた
           </button>
         </div>
       )}

@@ -38,7 +38,18 @@ export function buildCsv(sleeps: SleepRecord[], sleepiness: SleepinessRecord[]):
   for (const s of sleepiness) {
     rows.push({
       at: s.time,
-      cols: ['眠気', dateKey(s.time), dateTime(s.time), '', '', '', '', '', s.level],
+      // 眠気の「終了」は、その眠気が覚めてきた時刻(未記録なら空)
+      cols: [
+        '眠気',
+        dateKey(s.time),
+        dateTime(s.time),
+        s.easedAt != null ? dateTime(s.easedAt) : '',
+        '',
+        '',
+        '',
+        '',
+        s.level,
+      ],
     });
   }
   rows.sort((a, b) => a.at - b.at);

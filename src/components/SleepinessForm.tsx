@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { RATINGS, SLEEPINESS_LABEL } from '../types';
 import type { Rating, SleepinessRecord } from '../types';
-import { fromInputValue, toInputValue } from '../lib/time';
+import { formatDuration, fromInputValue, toInputValue } from '../lib/time';
 import { Sheet } from './Sheet';
 import './forms.css';
 
 export interface SleepinessDraft {
   time: number | null;
   level: Rating | null;
+  easedAt: number | null;
 }
 
 export interface SleepinessFormProps {
@@ -21,12 +22,16 @@ export interface SleepinessFormProps {
 export function SleepinessForm({ title, initial, onSubmit, onCancel, onDelete }: SleepinessFormProps) {
   const [timeStr, setTimeStr] = useState(initial.time != null ? toInputValue(initial.time) : '');
   const [level, setLevel] = useState<Rating | null>(initial.level);
+  const [easedStr, setEasedStr] = useState(initial.easedAt != null ? toInputValue(initial.easedAt) : '');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
+  const time = fromInputValue(timeStr);
+  const eased = fromInputValue(easedStr);
+  const easedAfter = time != null && eased != null && eased >= time ? eased - time : null;
+
   async function handleSave() {
     if (busy) return;
-    const time = fromInputValue(timeStr);
     if (time == null) {
       setError('時刻を入力してください');
       return;
@@ -35,10 +40,14 @@ export function SleepinessForm({ title, initial, onSubmit, onCancel, onDelete }:
       setError('眠気の強さを選んでください');
       return;
     }
+    if (eased != null && eased < time) {
+      setError('覚めてきた時刻は、眠気の時刻より後にしてください');
+      return;
+    }
     setError('');
     setBusy(true);
     try {
-      await onSubmit({ time, level });
+      await onSubmit(eased != null ? { time, level, easedAt: eased } : { time, level });
     } finally {
       setBusy(false);
     }
@@ -84,6 +93,27 @@ export function SleepinessForm({ title, initial, onSubmit, onCancel, onDelete }:
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="field">
+        <label className="field-label" htmlFor="sleepiness-eased">覚めてきた時刻</label>
+        <div className="input-with-clear">
+          <input
+            id="sleepiness-eased"
+            type="datetime-local"
+            className="input"
+            value={easedStr}
+            onChange={(e) => setEasedStr(e.target.value)}
+          />
+          {easedStr !== '' && (
+            <button type="button" className="btn input-clear" onClick={() => setEasedStr('')}>
+              消す
+            </button>
+          )}
+        </div>
+        <p className="hint">
+          {easedAfter != null ? `眠気から ${formatDuration(easedAfter)} 後` : 'まだなら空欄のまま'}
+        </p>
       </div>
 
       {error && <p className="error">{error}</p>}

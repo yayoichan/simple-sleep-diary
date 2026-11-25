@@ -100,6 +100,14 @@ export function RecordList() {
                     </span>
                     <span className="record-sub">{SLEEPINESS_LABEL[item.record.level]}</span>
                   </span>
+                  {item.record.easedAt != null && (
+                    <span className="record-sub">
+                      {dateKey(item.record.easedAt) === g.key
+                        ? formatTime(item.record.easedAt)
+                        : formatDateTime(item.record.easedAt)}{' '}
+                      に覚めてきた({formatDuration(item.record.easedAt - item.record.time)}後)
+                    </span>
+                  )}
                 </button>
               ),
             )}
@@ -145,7 +153,7 @@ export function RecordList() {
       {open.type === 'sleepiness-add' && (
         <SleepinessForm
           title="眠気を追加"
-          initial={{ time: nowMinute(), level: null }}
+          initial={{ time: nowMinute(), level: null, easedAt: null }}
           onCancel={close}
           onSubmit={async (rec) => {
             await db.sleepiness.add(rec);
@@ -157,10 +165,15 @@ export function RecordList() {
       {open.type === 'sleepiness-edit' && (
         <SleepinessForm
           title="眠気を編集"
-          initial={{ time: open.record.time, level: open.record.level }}
+          initial={{
+            time: open.record.time,
+            level: open.record.level,
+            easedAt: open.record.easedAt ?? null,
+          }}
           onCancel={close}
           onSubmit={async (rec) => {
-            await db.sleepiness.update(open.record.id!, rec);
+            // 覚めてきた時刻を消した場合も反映されるよう、丸ごと置き換える
+            await db.sleepiness.put({ ...rec, id: open.record.id! });
             toast('保存しました');
             close();
           }}

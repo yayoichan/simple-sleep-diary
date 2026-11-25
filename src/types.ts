@@ -36,6 +36,8 @@ export interface SleepinessRecord {
   time: number;
   /** 眠気の強さ 1〜5(1=はっきり、5=起きていられない) */
   level: Rating;
+  /** その眠気が覚めてきた時刻(未記録なら無し)。time 以降 */
+  easedAt?: number;
 }
 
 export const SLEEPINESS_LABEL: Record<Rating, string> = {
